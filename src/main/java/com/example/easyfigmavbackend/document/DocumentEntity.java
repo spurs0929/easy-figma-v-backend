@@ -46,4 +46,9 @@ public class DocumentEntity {
     public String getSnapshotJson() {
         return snapshotJson;
     }
+
+    public void updateSnapshot(String snapshotJson, Instant updatedAt) {
+        this.snapshotJson = snapshotJson;
+        this.updatedAt = updatedAt;
+    }
 }

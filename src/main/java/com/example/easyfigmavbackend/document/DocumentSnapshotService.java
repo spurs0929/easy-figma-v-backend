@@ -3,6 +3,7 @@ package com.example.easyfigmavbackend.document;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Instant;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,5 +29,16 @@ public class DocumentSnapshotService {
         } catch (JsonProcessingException exception) {
             throw new IllegalStateException("Stored document snapshot is not valid JSON", exception);
         }
+    }
+
+    @Transactional
+    public JsonNode updateSnapshot(UUID documentId, JsonNode snapshot) {
+        DocumentEntity document = documentRepository.findById(documentId)
+                .orElseThrow(() -> new DocumentNotFoundException(documentId));
+
+        document.updateSnapshot(snapshot.toString(), Instant.now());
+        documentRepository.save(document);
+
+        return snapshot;
     }
 }
